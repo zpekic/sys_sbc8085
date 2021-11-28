@@ -473,8 +473,9 @@ compa <= checksum(7 downto 0) when (h2m_compa = compa_checksum_lsb) else ram;
 -- input register is clocked by ser 2 par UART, and cleared by reset or internal signal
 on_hexin_ready: process(reset_in, h2m_input_reset, HEXIN_READY, HEXIN_CHAR, input)
 begin
+	--if ((reset_in or h2m_input_reset) = '1') then
 	if ((reset_in or h2m_input_reset) = '1') then
-		input <= X"00";
+		input <= X"00"; --'0' & ui_address; --X"00";
 		prev_is_spaceortab <= reset_in;
 		prev_is_crorlf <= reset_in;
 	else

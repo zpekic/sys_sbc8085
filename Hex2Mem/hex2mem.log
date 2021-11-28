@@ -22,85 +22,82 @@ Warning: mask value 255 detected. Range will be 0 to 255
 Line 233: resolved aliases:  goto
 L0233@001D.nextchar:  errcode <= ok, input_reset = 1, if false then next else deadloop;
 
-Line 248: resolved aliases:  back
-L0248@0028.  if true then return else return;
+Line 242: resolved aliases:  goto
+L0242@0023.  TXDCHAR <= char_lf, if false then next else emit;
 
-Line 254: resolved aliases:  back
-L0254@002D.  if true then return else return;
+Line 247: resolved aliases:  goto
+L0247@0027.  TXDCHAR <= addr0, if false then next else emit;
 
-Line 259: resolved aliases:  goto
-L0259@0030.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 252: resolved aliases:  goto
+L0252@0030.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 263: resolved aliases:  goto
-L0263@0031.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 256: resolved aliases:  goto
+L0256@0031.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 267: resolved aliases:  goto
-L0267@0032.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 260: resolved aliases:  goto
+L0260@0032.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 271: resolved aliases:  goto
-L0271@0033.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 264: resolved aliases:  goto
+L0264@0033.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 275: resolved aliases:  goto
-L0275@0034.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 268: resolved aliases:  goto
+L0268@0034.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 279: resolved aliases:  goto
-L0279@0035.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 272: resolved aliases:  goto
+L0272@0035.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 283: resolved aliases:  goto
-L0283@0036.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 276: resolved aliases:  goto
+L0276@0036.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 287: resolved aliases:  goto
-L0287@0037.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 280: resolved aliases:  goto
+L0280@0037.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 291: resolved aliases:  goto
-L0291@0038.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 284: resolved aliases:  goto
+L0284@0038.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 295: resolved aliases:  goto
-L0295@0039.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 288: resolved aliases:  goto
+L0288@0039.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 300: resolved aliases:  goto
-L0300@003A.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 293: resolved aliases:  goto
+L0293@003A.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 305: resolved aliases:  goto
-L0305@003B.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 298: resolved aliases:  goto
+L0298@003B.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 310: resolved aliases:  goto
-L0310@003C.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 303: resolved aliases:  goto
+L0303@003C.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 315: resolved aliases:  goto
-L0315@003D.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
+Line 308: resolved aliases:  goto
+L0308@003D.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
-Line 320: resolved aliases:  goto
-L0320@003E.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
-
-Warning: else clause missing in if statement, default value '' will be used
-Line 329: resolved aliases:  goto
-L0329@0043.dontadd:  hexcnt <= inc, if false then next else nextchar;
-
-Line 337: resolved aliases:  lincnt_inc, poscnt_zero
-L0337@0047.  poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badhex else next;
+Line 313: resolved aliases:  goto
+L0313@003E.  ram_write = 1, ram_addr = bytecnt, if false then next else hexchar;
 
 Warning: else clause missing in if statement, default value '' will be used
+Line 322: resolved aliases:  goto
+L0322@0043.dontadd:  hexcnt <= inc, if false then next else nextchar;
+
+Line 330: resolved aliases:  lincnt_inc, poscnt_zero
+L0330@0047.  poscnt_a = zero, lincnt_cin = 1, if hexcnt_is_odd then badhex else next;
+
 Warning: else clause missing in if statement, default value '' will be used
-Line 361: resolved aliases:  goto
-L0361@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
+Warning: else clause missing in if statement, default value '' will be used
+Line 354: resolved aliases:  goto
+L0354@0059.  hexcnt <= inc, address <= inc, if false then next else writeloop;
 
-Line 363: resolved aliases:  lincnt_zero
-L0363@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
+Line 356: resolved aliases:  lincnt_zero
+L0356@005A.lastrec:  lincnt_a = zero, if resetout_done then next else next;
 
-Line 365: resolved aliases:  goto
-L0365@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
+Line 358: resolved aliases:  goto
+L0358@005C.nextrec:  hexcnt <= ptr_colon, if false then next else nextchar;
 
-Line 371: resolved aliases:  back
-L0371@0061.  if true then return else return;
+Line 374: resolved aliases:  goto
+L0374@0061.  hexcnt <= inc, if false then next else nextchar;
 
-Line 381: resolved aliases:  goto
-L0381@0066.  hexcnt <= inc, if false then next else nextchar;
+Line 408: resolved aliases:  goto
+L0408@007A.  if false then next else printramR;
 
-Line 415: resolved aliases:  goto
-L0415@007D.  if false then next else printramR;
-
-Success: pass 1 417 line(s) read, 207 statement(s) parsed.
+Success: pass 1 414 line(s) read, 202 statement(s) parsed.
 Compiling hex2mem.mcc, pass 2 out of 2.
 Info: line -1 - symbol[0000] <= 'System.Byte[]'
 Info: line -1 - symbol[0001] <= 'System.Byte[]'
@@ -260,7 +257,7 @@ Info: line 5 - code[0003] <= '1_1_1_0000_0000000_0000000_01111_0_0_0_0_00_0_000_
 Info: line -1 - symbol[0003] <= 'System.Byte[]'
 Info: line 5 - code[0004] <= '1_1_0_0011_0000001_0000000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0004] <= 'System.Byte[]'
-Info: line 5 - code[0005] <= '1_1_1_0000_1100111_1100111_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0005] <= '1_1_1_0000_1100010_1100010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0005] <= 'System.Byte[]'
 Info: line 5 - code[0006] <= '1_1_1_0000_0000011_0000011_00000_1_0_1_1_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0006] <= 'System.Byte[]'
@@ -533,74 +530,62 @@ Info: line 5 - code[000B] <= '1_1_1_0110_0001101_0011101_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[000B] <= 'System.Byte[]'
 Info: line 5 - code[000C] <= '1_1_1_0110_0000000_0011101_00000_1_0_1_0_00_0_000_000_00_0_010_0_00'
 Info: line -1 - symbol[000C] <= 'System.Byte[]'
-Info: line 5 - code[000D] <= '1_1_1_0000_0011110_0011110_00101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000D] <= '1_1_1_0000_1111011_1111011_00101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000D] <= 'System.Byte[]'
-Info: line 5 - code[000E] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000E] <= '1_1_1_0000_1111011_1111011_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000E] <= 'System.Byte[]'
-Info: line 5 - code[000F] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[000F] <= '1_1_1_0000_1111011_1111011_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[000F] <= 'System.Byte[]'
-Info: line 5 - code[0010] <= '1_1_1_0000_0011110_0011110_11111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0010] <= '1_1_1_0000_1111011_1111011_11111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0010] <= 'System.Byte[]'
-Info: line 5 - code[0011] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0011] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0011] <= 'System.Byte[]'
-Info: line 5 - code[0012] <= '1_1_1_0000_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0012] <= '1_1_1_0000_1111011_1111011_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0012] <= 'System.Byte[]'
-Info: line 5 - code[0013] <= '1_1_1_0000_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0013] <= '1_1_1_0000_1111011_1111011_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0013] <= 'System.Byte[]'
-Info: line 5 - code[0014] <= '1_1_1_0000_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0014] <= '1_1_1_0000_1111011_1111011_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0014] <= 'System.Byte[]'
-Info: line 5 - code[0015] <= '1_1_1_0000_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0015] <= '1_1_1_0000_1111011_1111011_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0015] <= 'System.Byte[]'
-Info: line 5 - code[0016] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0016] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0016] <= 'System.Byte[]'
-Info: line 5 - code[0017] <= '1_1_1_0000_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0017] <= '1_1_1_0000_1111011_1111011_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0017] <= 'System.Byte[]'
-Info: line 5 - code[0018] <= '1_1_1_0000_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0018] <= '1_1_1_0000_1111011_1111011_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0018] <= 'System.Byte[]'
-Info: line 5 - code[0019] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0019] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0019] <= 'System.Byte[]'
-Info: line 5 - code[001A] <= '1_1_1_0000_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001A] <= '1_1_1_0000_1111011_1111011_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001A] <= 'System.Byte[]'
-Info: line 5 - code[001B] <= '1_1_1_0000_0011110_0011110_10010_1_0_1_0_00_0_000_010_00_0_110_0_00'
+Info: line 5 - code[001B] <= '1_1_1_0000_1111011_1111011_10010_1_0_1_0_00_0_000_010_00_0_110_0_00'
 Info: line -1 - symbol[001B] <= 'System.Byte[]'
-Info: line 5 - code[001C] <= '1_1_1_0000_0100110_0100110_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001C] <= '1_1_1_0000_0100010_0100010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001C] <= 'System.Byte[]'
 Warning in line 6: overwriting '0000111' with '0011101' at mapper[0000]
 Info: Mapper location 0 set to value '0011101'
 Info: line 5 - code[001D] <= '1_1_1_1111_0000000_0000100_00000_1_0_1_0_00_0_000_000_00_1_000_0_00'
 Info: line -1 - symbol[001D] <= 'System.Byte[]'
-Info: line 5 - code[001E] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001E] <= '1_1_1_0000_1111011_1111011_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001E] <= 'System.Byte[]'
-Info: line 5 - code[001F] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[001F] <= '1_1_1_0000_1111011_1111011_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[001F] <= 'System.Byte[]'
-Info: line 5 - code[0020] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0020] <= '1_1_1_0000_1111011_1111011_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0020] <= 'System.Byte[]'
-Info: line 5 - code[0021] <= '1_1_1_0101_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0021] <= '1_1_1_0000_1111011_1111011_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0021] <= 'System.Byte[]'
-Info: line 5 - code[0022] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0022] <= '1_1_1_0000_1111011_1111011_00011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0022] <= 'System.Byte[]'
-Info: line 5 - code[0023] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0023] <= '1_1_1_1111_0000000_1111011_00100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0023] <= 'System.Byte[]'
-Info: line 5 - code[0024] <= '1_1_1_0000_0011110_0011110_10001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0024] <= '1_1_1_0000_1111011_1111011_11101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0024] <= 'System.Byte[]'
-Info: line 5 - code[0025] <= '1_1_1_0000_0011110_0011110_10000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0025] <= '1_1_1_0000_1111011_1111011_11100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0025] <= 'System.Byte[]'
-Info: line 5 - code[0026] <= '1_1_1_0000_0011110_0011110_00011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0026] <= '1_1_1_0000_1111011_1111011_11011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0026] <= 'System.Byte[]'
-Info: line 5 - code[0027] <= '1_1_1_0000_0011110_0011110_00100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0027] <= '1_1_1_1111_0000000_1111011_11010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0027] <= 'System.Byte[]'
-Info: line 5 - code[0028] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[0028] <= 'System.Byte[]'
-Info: line 5 - code[0029] <= '1_1_1_0000_0011110_0011110_11101_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[0029] <= 'System.Byte[]'
-Info: line 5 - code[002A] <= '1_1_1_0000_0011110_0011110_11100_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[002A] <= 'System.Byte[]'
-Info: line 5 - code[002B] <= '1_1_1_0000_0011110_0011110_11011_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[002B] <= 'System.Byte[]'
-Info: line 5 - code[002C] <= '1_1_1_0000_0011110_0011110_11010_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[002C] <= 'System.Byte[]'
-Info: line 5 - code[002D] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
-Info: line -1 - symbol[002D] <= 'System.Byte[]'
 Warning in line 6: overwriting '0000111' with '0110000' at mapper[0030]
 Info: Mapper location 48 set to value '0110000'
 Info: line 5 - code[0030] <= '1_1_1_1111_0000000_1000000_00000_1_0_1_0_00_1_000_000_00_0_110_0_00'
@@ -719,15 +704,15 @@ Info: line 5 - code[0051] <= '0_0_1_0001_0000000_0000001_00000_1_0_1_0_00_0_000_
 Info: line -1 - symbol[0051] <= 'System.Byte[]'
 Info: line 5 - code[0052] <= '1_1_1_0111_0000000_1011000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0052] <= 'System.Byte[]'
-Info: line 5 - code[0053] <= '1_1_1_0000_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0053] <= '1_1_1_0000_1111011_1111011_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0053] <= 'System.Byte[]'
-Info: line 5 - code[0054] <= '1_1_1_0000_0011110_0011110_01100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0054] <= '1_1_1_0000_1111011_1111011_01100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0054] <= 'System.Byte[]'
-Info: line 5 - code[0055] <= '1_1_1_0000_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0055] <= '1_1_1_0000_0100100_0100100_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0055] <= 'System.Byte[]'
-Info: line 5 - code[0056] <= '1_1_1_0000_0011110_0011110_01101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0056] <= '1_1_1_0000_1111011_1111011_01101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0056] <= 'System.Byte[]'
-Info: line 5 - code[0057] <= '1_1_1_0000_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0057] <= '1_1_1_0000_0011111_0011111_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0057] <= 'System.Byte[]'
 Info: line 5 - code[0058] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
 Info: line -1 - symbol[0058] <= 'System.Byte[]'
@@ -739,100 +724,99 @@ Info: line 5 - code[005B] <= '1_1_1_1101_0000000_0001011_00000_1_0_1_0_00_0_001_
 Info: line -1 - symbol[005B] <= 'System.Byte[]'
 Info: line 5 - code[005C] <= '1_1_1_1111_0000000_0011101_00000_1_0_1_0_00_0_000_010_00_0_110_0_00'
 Info: line -1 - symbol[005C] <= 'System.Byte[]'
-Info: line 5 - code[005D] <= '1_1_1_0000_0011110_0011110_00110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Warning in line 6: overwriting '0000111' with '1011101' at mapper[0009]
+Info: Mapper location 9 set to value '1011101'
+Warning in line 6: overwriting '0000111' with '1011101' at mapper[0020]
+Info: Mapper location 32 set to value '1011101'
+Info: line 5 - code[005D] <= '1_1_1_1100_0011101_0000000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[005D] <= 'System.Byte[]'
-Info: line 5 - code[005E] <= '1_1_1_0000_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[005E] <= '1_1_1_1010_0000111_0011101_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[005E] <= 'System.Byte[]'
-Info: line 5 - code[005F] <= '1_1_1_0000_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Warning in line 6: overwriting '0000111' with '1011111' at mapper[003A]
+Info: Mapper location 58 set to value '1011111'
+Info: line 5 - code[005F] <= '1_1_1_1001_0000000_0001000_00000_1_0_1_0_00_0_000_000_01_0_110_0_00'
 Info: line -1 - symbol[005F] <= 'System.Byte[]'
-Info: line 5 - code[0060] <= '1_1_1_0000_0100011_0100011_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0060] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
 Info: line -1 - symbol[0060] <= 'System.Byte[]'
-Info: line 5 - code[0061] <= '1_1_1_0000_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0061] <= '1_1_1_1111_0000000_0011101_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
 Info: line -1 - symbol[0061] <= 'System.Byte[]'
-Warning in line 6: overwriting '0000111' with '1100010' at mapper[0009]
-Info: Mapper location 9 set to value '1100010'
-Warning in line 6: overwriting '0000111' with '1100010' at mapper[0020]
-Info: Mapper location 32 set to value '1100010'
-Info: line 5 - code[0062] <= '1_1_1_1100_0011101_0000000_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0062] <= '1_1_1_1000_0000000_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0062] <= 'System.Byte[]'
-Info: line 5 - code[0063] <= '1_1_1_1010_0000111_0011101_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0063] <= '1_1_1_0000_1111011_1111011_00111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0063] <= 'System.Byte[]'
-Warning in line 6: overwriting '0000111' with '1100100' at mapper[003A]
-Info: Mapper location 58 set to value '1100100'
-Info: line 5 - code[0064] <= '1_1_1_1001_0000000_0001000_00000_1_0_1_0_00_0_000_000_01_0_110_0_00'
+Info: line 5 - code[0064] <= '1_1_1_0000_1111011_1111011_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0064] <= 'System.Byte[]'
-Info: line 5 - code[0065] <= '1_1_1_0000_0000000_0000000_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
+Info: line 5 - code[0065] <= '1_1_1_0000_1111011_1111011_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0065] <= 'System.Byte[]'
-Info: line 5 - code[0066] <= '1_1_1_1111_0000000_0011101_00000_1_0_1_0_00_0_000_001_00_0_110_0_00'
+Info: line 5 - code[0066] <= '1_1_1_0000_1111011_1111011_10010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0066] <= 'System.Byte[]'
-Info: line 5 - code[0067] <= '1_1_1_1000_0000000_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0067] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0067] <= 'System.Byte[]'
-Info: line 5 - code[0068] <= '1_1_1_0000_0011110_0011110_00111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0068] <= '1_1_1_0000_1111011_1111011_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0068] <= 'System.Byte[]'
-Info: line 5 - code[0069] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0069] <= '1_1_1_0000_1111011_1111011_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0069] <= 'System.Byte[]'
-Info: line 5 - code[006A] <= '1_1_1_0000_0011110_0011110_10011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006A] <= '1_1_1_0000_0100100_0100100_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006A] <= 'System.Byte[]'
-Info: line 5 - code[006B] <= '1_1_1_0000_0011110_0011110_10010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006B] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006B] <= 'System.Byte[]'
-Info: line 5 - code[006C] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006C] <= '1_1_1_0000_1111011_1111011_01010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006C] <= 'System.Byte[]'
-Info: line 5 - code[006D] <= '1_1_1_0000_0011110_0011110_01001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006D] <= '1_1_1_0000_1111011_1111011_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006D] <= 'System.Byte[]'
-Info: line 5 - code[006E] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006E] <= '1_1_1_0000_1111011_1111011_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006E] <= 'System.Byte[]'
-Info: line 5 - code[006F] <= '1_1_1_0000_0101001_0101001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[006F] <= '1_1_1_0000_1111011_1111011_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[006F] <= 'System.Byte[]'
-Info: line 5 - code[0070] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0070] <= '1_1_1_0000_1111011_1111011_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0070] <= 'System.Byte[]'
-Info: line 5 - code[0071] <= '1_1_1_0000_0011110_0011110_01010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0071] <= '1_1_1_0000_1111011_1111011_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0071] <= 'System.Byte[]'
-Info: line 5 - code[0072] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0072] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0072] <= 'System.Byte[]'
-Info: line 5 - code[0073] <= '1_1_1_0000_0011110_0011110_10111_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0073] <= '1_1_1_0000_1111011_1111011_11110_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0073] <= 'System.Byte[]'
-Info: line 5 - code[0074] <= '1_1_1_0000_0011110_0011110_10110_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0074] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0074] <= 'System.Byte[]'
-Info: line 5 - code[0075] <= '1_1_1_0000_0011110_0011110_10101_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0075] <= '1_1_1_0000_1111011_1111011_01000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0075] <= 'System.Byte[]'
-Info: line 5 - code[0076] <= '1_1_1_0000_0011110_0011110_10100_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0076] <= '1_1_1_0000_1111011_1111011_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0076] <= 'System.Byte[]'
-Info: line 5 - code[0077] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0077] <= '1_1_1_0000_1111011_1111011_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0077] <= 'System.Byte[]'
-Info: line 5 - code[0078] <= '1_1_1_0000_0011110_0011110_01000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0078] <= '1_1_1_0000_1111011_1111011_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0078] <= 'System.Byte[]'
-Info: line 5 - code[0079] <= '1_1_1_0000_0011110_0011110_01011_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[0079] <= '1_1_1_0000_1111011_1111011_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[0079] <= 'System.Byte[]'
-Info: line 5 - code[007A] <= '1_1_1_0000_0011110_0011110_11001_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007A] <= '1_1_1_1111_0000000_0011110_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007A] <= 'System.Byte[]'
-Info: line 5 - code[007B] <= '1_1_1_0000_0011110_0011110_11000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007B] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007B] <= 'System.Byte[]'
-Info: line 5 - code[007C] <= '1_1_1_0000_0011110_0011110_00010_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007C] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007C] <= 'System.Byte[]'
-Info: line 5 - code[007D] <= '1_1_1_1111_0000000_0100010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line 5 - code[007D] <= '1_1_1_0100_0000000_0000001_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
 Info: line -1 - symbol[007D] <= 'System.Byte[]'
+Info: line 5 - code[007E] <= '1_1_1_0101_0000010_0000010_00000_1_0_1_0_00_0_000_000_00_0_110_0_00'
+Info: line -1 - symbol[007E] <= 'System.Byte[]'
 Generating code: 
-Warning in line 5: found 4 uninitialized locations:
-002E .. 002F
-007E .. 007F
+Warning in line 5: found 9 uninitialized locations:
+0028 .. 002F
+007F .. 007F
 
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.mif' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 124, empty locations: 4, total locations: 128).
-Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.vhd' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code.hex' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_lendian.bin' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_code_bendian.bin' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code.coe' (LF only) ... Done (initialized locations: 119, empty locations: 9, total locations: 128).
+Generating code 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code.vhd' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code.hex' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code_lendian.bin' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_code_bendian.bin' ... Done.
 Generating mapping: 
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.mif' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.coe' (LF only) ... Done (initialized locations: 256, empty locations: 0, total locations: 256).
-Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.vhd' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.hex' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_map.bin' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.cgf' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.coe' (LF only) ... Done (initialized locations: 256, empty locations: 0, total locations: 256).
+Generating mapper 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.vhd' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.hex' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_map.bin' ... Done.
 Generating symbol: 
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.mif' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.cgf' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.coe' (LF only) ... Done (initialized locations: 128, empty locations: 0, total locations: 128).
-Generating code 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem_sym.vhd' ... Done.
-Writing 'C:\Users\zoltanp\Documents\HexCalc\Hex_IO\Hex_IO\Hex2Mem\hex2mem
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\hex2mem_sym.mif' ... Done.
+Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Hex2Mem\h

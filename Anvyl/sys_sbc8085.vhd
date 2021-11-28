@@ -66,8 +66,8 @@ entity sys_sbc8085 is
 				--JB3: in std_logic;
 				--JB4: inout std_logic;
 				--DIP switches
-				--DIP_B4, DIP_B3, DIP_B2, DIP_B1: in std_logic;
-				--DIP_A4, DIP_A3, DIP_A2, DIP_A1: in std_logic;
+				DIP_B4, DIP_B3, DIP_B2, DIP_B1: in std_logic;
+				DIP_A4, DIP_A3, DIP_A2, DIP_A1: in std_logic;
 --				-- Hex keypad
 				--KYPD_COL: out std_logic_vector(3 downto 0);
 				--KYPD_ROW: in std_logic_vector(3 downto 0);
@@ -81,12 +81,12 @@ entity sys_sbc8085 is
 				Memory_address: out std_logic_vector(18 downto 0);
 				Memory_data: inout std_logic_vector(15 downto 0);
 				-- Red / Yellow / Green LEDs
-				--LDT1G: out std_logic;
-				--LDT1Y: out std_logic;
-				--LDT1R: out std_logic;
-				--LDT2G: out std_logic;
-				--LDT2Y: out std_logic;
-				--LDT2R: out std_logic;
+				LDT1G: out std_logic;
+				LDT1Y: out std_logic;
+				LDT1R: out std_logic;
+				LDT2G: out std_logic;
+				LDT2Y: out std_logic;
+				LDT2R: out std_logic;
 				-- VGA
 				HSYNC_O: out std_logic;
 				VSYNC_O: out std_logic;
@@ -230,8 +230,9 @@ end component;
 component tty2vga is
     Port ( reset : in  STD_LOGIC;
            tty_clk : in  STD_LOGIC;
-           char : in  STD_LOGIC_VECTOR (7 downto 0);
-			  char_sent: out STD_LOGIC;
+           ascii : in  STD_LOGIC_VECTOR (7 downto 0);
+			  ascii_send: in STD_LOGIC;
+			  ascii_sent: out STD_LOGIC;
 			  cur_clk : in  STD_LOGIC;
            vga_clk : in  STD_LOGIC;
            vga_hsync : out  STD_LOGIC;
@@ -286,16 +287,13 @@ signal reset: std_logic;
 
 -- debug
 signal showdigit, showdot: std_logic_vector(3 downto 0);
---signal charpat: std_logic_vector(7 downto 0);
---signal symbol_d: std_logic_vector(7 downto 0);
---signal symbol_a: std_logic_vector(12 downto 0);
-signal led_debug, hexin_debug, hexout_debug, baudrate_debug, tty_debug: std_logic_vector(31 downto 0);
-signal loopback_char: std_logic_vector(7 downto 0);
+signal led_debug, led_sys, hexin_debug, hexout_debug, baudrate_debug, tty_debug: std_logic_vector(31 downto 0);
+signal loopback_char, loopback_src: std_logic_vector(7 downto 0);
+signal loopback_send: std_logic;
 
 --- frequency signals
 signal freq_50M: std_logic_vector(11 downto 0);
 alias debounce_clk: std_logic is freq_50M(9);
-
 signal freq4096: std_logic;		
 signal freq_2048: std_logic_vector(11 downto 0);
 signal prescale_baud, prescale_power: integer range 0 to 65535;
@@ -306,6 +304,7 @@ alias switch_sel:	std_logic_vector(1 downto 0) is switch(7 downto 6);
 alias switch_uart_rate: std_logic_vector(2 downto 0) is switch(5 downto 3);
 alias switch_uart_mode: std_logic_vector(2 downto 0) is switch(2 downto 0);
 signal btn_command, btn_window: std_logic_vector(3 downto 0);
+signal page_sel: std_logic_vector(7 downto 0);
 
 -- HEX common 
 signal baudrate_x1, baudrate_x2, baudrate_x4, baudrate_x8: std_logic;
@@ -319,14 +318,22 @@ signal hexout_busreq, hexout_busack: std_logic;
 signal hexout_ready, hexout_send: std_logic;
 
 -- HEX input path
-signal rx_ready: std_logic;
+signal rx_ready, rx_valid: std_logic; 
 signal rx_char: std_logic_vector(7 downto 0);
+signal hexin_ready: std_logic;
 signal hexin_char: std_logic_vector(7 downto 0);
+signal hexin_debug_ready, hexin_debug_send: std_logic;
+signal hexin_debug_char: std_logic_vector(7 downto 0);
 signal hexin_busreq, hexin_busack: std_logic;
 
--- VGA
-signal vga_sent, vga_sent_delayed: std_logic;
-signal vga_char: std_logic_vector(7 downto 0);
+-- Memory
+signal nMemRead, nMemWrite, nMem, nWait, wait_clk: std_logic;
+signal ABUS: std_logic_vector(15 downto 0);
+signal DBUS, ext_dbus: std_logic_vector(7 downto 0);
+
+-- TTY
+signal tty_sent, tty_send: std_logic;
+signal tty_char: std_logic_vector(7 downto 0);
 alias tty_clk: std_logic is freq_50M(2); --freq_2048(11);
 
 -- UART control registers
@@ -337,8 +344,7 @@ begin
 -- no separate reset button
 reset <= '1' when (BTN = "1111") else '0';
 
--- various clock signal generation (main clock domain is derived from external clock)
-	
+-- various clock signal generation
 clockgen: sn74hc4040 port map (
 			clock => CLK,	-- 100MHz crystal on Anvyl board
 			reset => RESET,
@@ -377,19 +383,6 @@ baudgen: sn74hc4040 port map (
 			q(2) => baudrate_x1,
 			q(11 downto 3) => open		
 		);	
-		
--- common clock for hex input and output processors
---hex_clk <= freq(to_integer(4 + unsigned(switch_hexclk)));
---with switch_tmclk select mux_clk <=
---	freq4 	when "000",	-- lentissimo
---	freq16	when "001",	-- lento
---	freq4096 when "010",	-- vivace
---	freq(9) when "011",	-- 0.09375MHz
---	freq(8) when "100",	-- 0.1875HHz
---	freq(7) when "101",	-- 0.375MHz
---	freq(6) when "110",	-- 0.75MHz	
---	freq(5) when others;	-- 1.50MHz	
-
 
 	debounce_sw: debouncer8channel Port map ( 
 		clock => debounce_clk, 
@@ -418,20 +411,58 @@ counter: freqcounter Port map (
 	);
 
 		
---------------------------------------------------------------------			
--- 	SW7	SW6	Mode				VGA				7seg LED	
---		0		0		sel_hexout		Trace MEM2HEX	mem2hex debug port
---		0		1		sel_hexin		Trace HEX2MEM	hex2mem debug port
---		1		0		sel_loopback0	Echo UART RX	UART mode
---		1		1		sel_loopback1	Echo UART RX	Baudrate (dec)	
---------------------------------------------------------------------
-memory_address(18 downto 16) <= "000";
-SRAM_CS1 <= switch_sel(1);
-SRAM_CS2 <= '1';
-SRAM_UPPER_B <= '1';
-SRAM_LOWER_B <= '0';
+---------------------------------------------------------------------------------------------			
+-- 	SW7	SW6	Mode				TTY (VGA)			UART TX				7seg LED	
+---------------------------------------------------------------------------------------------
+--		0		0		sel_hexout		-				 		Generated HEX		mem2hex debug port (or bus if nWait = 0)
+--		0		1		sel_hexin		Microcode trace	Echo UART RX		hex2mem debug port (or bus if nWait = 0)
+--		1		0		sel_loopback0	Echo UART RX		Echo UART RX		UART mode
+--		1		1		sel_loopback1	Echo UART RX		Echo UART RX		Baudrate (decimal)	
+---------------------------------------------------------------------------------------------
+nMem <= hexin_busack and hexout_busack;
+--memory_address <= "000" & ABUS;
+--memory_data(7 downto 0) <= DBUS when (nMemWrite = '0') else "ZZZZZZZZ";
+--DBUS <= memory_data(7 downto 0) when (nMemRead = '0') else "ZZZZZZZZ";
+--SRAM_CS1 <= switch_sel(1);
+--SRAM_CS2 <= '1';
+--SRAM_UPPER_B <= '1';
+--SRAM_LOWER_B <= switch_sel(1);
+--SRAM_OE <= nMemRead;
+--SRAM_WE <= nMemWrite;
 
+-- external memory
+SRAM_CS1 <= nMem;
+SRAM_CS2 <= '1';
+SRAM_OE <= nMemRead;
+SRAM_WE <= nMemWrite;
+SRAM_UPPER_B <= not ABUS(0);
+SRAM_LOWER_B <= ABUS(0);
+Memory_address(18 downto 15) <= "0000";
+Memory_address(14 downto 0) <= ABUS(15 downto 1);
+
+Memory_data <= (DBUS & DBUS) when (nMemWrite = '0') else "ZZZZZZZZZZZZZZZZ";
+ext_dbus <= Memory_data(15 downto 8) when (ABUS(0) = '1') else Memory_data(7 downto 0);
+DBUS <= ext_dbus when (nMemRead = '0') else "ZZZZZZZZ";
+	
+page_sel <= DIP_B4 & DIP_B3 & DIP_B2 & DIP_B1 & DIP_A4 & DIP_A3 & DIP_A2 & DIP_A1;
+
+-- Wait signal
+wait_clk <= (not nMem) when (nWait = '1') else button(3);
+on_wait_clk: process(reset, wait_clk)
+begin
+	if (reset = '1') then
+		nWait <= '1';
+	else
+		if (rising_edge(wait_clk)) then 
+			nWait <= '1'; --not nWait; -- TODO: enable nWait
+		end if;
+	end if;
+end process;
+
+-- HEX output path
 hexout_busack <= hexout_busreq when (switch_sel = sel_hexout) else '1';
+LDT1G <= not (nMemRead);
+LDT1R <= not rx_valid;		-- should never light up!
 
 hexout: mem2hex port map (
 			clk => hex_clk,
@@ -439,19 +470,55 @@ hexout: mem2hex port map (
 			--
 			debug => hexout_debug(15 downto 0),
 			--
-			nRD => SRAM_OE,
+			nRD => nMemRead,
 			nBUSREQ => hexout_busreq,
 			nBUSACK => hexout_busack,
-			nWAIT => '1',
-			ABUS => memory_address(15 downto 0),
-			DBUS => memory_data(7 downto 0),
-			START => button(0),
-			BUSY => open,
-			PAGE => "10000000",	-- 8*8k = 64k
+			nWAIT => nWait,
+			ABUS => ABUS,
+			DBUS => DBUS,
+			START => BTN(0),		
+			BUSY => LDT1Y,			-- yellow LED when busy
+			PAGE => page_sel,		-- select any 8k block using micro DIP switches
 			COUNTSEL => '0',		-- 16 bytes per record
 			TXDREADY => tx_ready,
 			TXDSEND => hexout_send,
 			CHAR => hexout_char
+		);
+
+-- HEX input path
+hexin_busack <= hexin_busreq when (switch_sel = sel_hexin) else '1';
+LDT2G <= not (nMemWrite);
+hexin_ready <= rx_ready when (switch_sel = sel_hexin) else '0';
+hexin_char <= rx_char when (switch_sel = sel_hexin) else X"00";
+--hexin_debug_ready <= vga_sent when (switch_sel = sel_hexin) else '1';
+
+hexin: hex2mem Port map (
+			clk => hex_clk,
+			reset_in => reset,
+			reset_out => open,
+			reset_page => page_sel, -- not really used but i8080-like system would reset at lowest 8k updated
+			--
+			debug => hexin_debug(15 downto 0),
+			--
+			nWR => nMemWrite,
+			nBUSREQ => hexin_busreq,
+			nBUSACK => hexin_busack,
+			nWAIT => nWait,
+			ABUS => ABUS,
+			DBUS => DBUS,
+			BUSY => LDT2Y,	-- yellow LED when busy
+			--
+			HEXIN_READY => hexin_ready,
+			HEXIN_CHAR	=> hexin_char,
+			HEXIN_ZERO => open,
+			--
+			TRACE_ERROR => '1', -- yes
+			TRACE_WRITE => '1', -- yes
+			TRACE_CHAR	=> '1', -- no
+			ERROR => LDT2R,	-- red LED when error detected
+			TXDREADY => tty_sent,
+			TXDSEND => hexin_debug_send,
+			TXDCHAR => hexin_debug_char
 		);
 
 ----------------------------------------
@@ -463,7 +530,7 @@ uart_rx: uart_ser2par Port map (
 		mode => switch_uart_mode,
 		char => rx_char,
 		ready => rx_ready,
-		valid => open,
+		valid => rx_valid,
 		rxd => PMOD_TXD
 		);
 
@@ -472,11 +539,11 @@ uart_rx: uart_ser2par Port map (
 -----------------------------------------
 with switch_sel select tx_send <=
 	hexout_send when sel_hexout,
-	(not rx_ready) when others;
+	rx_ready when others;
 	
 with switch_sel select tx_char <=
 	hexout_char when sel_hexout,
-	loopback_char when others;
+	rx_char when others;
 	
 uart_tx: uart_par2ser Port map (
 		reset => reset,
@@ -487,37 +554,24 @@ uart_tx: uart_par2ser Port map (
 		ready => tx_ready,
 		txd => PMOD_RXD
 		);
------------------------------------------
-			
-on_rx_ready: process(rx_ready, rx_char, vga_sent, vga_sent_delayed)
-begin
-	if ((reset or (vga_sent and (not vga_sent_delayed))) = '1') then
-		loopback_char <= X"00";	-- to stop VGA to echo forever
-	else
-		if (rising_edge(rx_ready)) then
-			loopback_char <= rx_char;
-		end if;
-	end if;
-end process;
-
-on_tty_clk: process(tty_clk, vga_sent)
-begin
-	if (rising_edge(tty_clk)) then
-		vga_sent_delayed <= vga_sent;
-	end if;
-end process;
-
+		
 -- echo to VGA
-with switch_sel select vga_char <=
-	X"00" when sel_hexin,	-- TODO
-	X"00" when sel_hexout,	-- TODO
-	loopback_char when others;
+with switch_sel select tty_char <=
+	hexin_debug_char when sel_hexin,	
+	X"00" when sel_hexout,		-- not used
+	rx_char when others;			-- echo incoming char
+
+with switch_sel select tty_send <=
+	hexin_debug_send when sel_hexin,	
+	'0' when sel_hexout,			-- not used
+	rx_ready when others;		-- echo incoming char
 	
 tty: tty2vga Port map(
 		reset => reset,
 		tty_clk => tty_clk,
-		char => vga_char,
-		char_sent => vga_sent,
+		ascii => tty_char,
+		ascii_send => tty_send,
+		ascii_sent => tty_sent,
 		cur_clk => freq_2048(10),	-- 2Hz
 		vga_clk => freq_50M(1),		-- 25MHz
 		vga_hsync => HSYNC_O,
@@ -531,16 +585,17 @@ tty: tty2vga Port map(
 
 -- 8 single LEDs
 with switch_sel select LED <= 
-	memory_data(7 downto 0) when sel_hexout,
-	memory_data(7 downto 0) when sel_hexin,
-	tx_char when others;
+	tx_char when sel_hexout,
+	rx_char when others;
 
 -- 7 seg LED debug display		
-with switch_sel select led_debug <= 
+with switch_sel select led_sys <= 
 	baudrate_debug when sel_loopback0,
 	X"0000" & uartmode_debug(to_integer(unsigned(switch_uart_mode))) when sel_loopback1,
 	hexout_debug when sel_hexout,
-	"11111111" & X"543210" when others;
+	hexin_debug when sel_hexin;
+
+led_debug <= ("00000101" & ABUS & DBUS) when (nWait = '0') else led_sys; 
 	
 led6: sixdigitsevensegled Port map ( 
 		-- inputs

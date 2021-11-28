@@ -32,8 +32,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity tty2vga is
     Port ( reset : in  STD_LOGIC;
            tty_clk : in  STD_LOGIC;
-           char : in  STD_LOGIC_VECTOR (7 downto 0);
-			  char_sent: out STD_LOGIC;
+           ascii : in  STD_LOGIC_VECTOR (7 downto 0);
+			  ascii_send: in STD_LOGIC;
+			  ascii_sent: out STD_LOGIC;
 			  cur_clk : in  STD_LOGIC;
            vga_clk : in  STD_LOGIC;
            vga_hsync : out  STD_LOGIC;
@@ -103,9 +104,9 @@ component xyram is
            dout : out  STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
-signal tty_rd, tty_wr: std_logic;
+signal tty_rd, tty_wr, char_sent, char_sent_delayed: std_logic;
 signal tty_memaddr: std_logic_vector(15 downto 0);
-signal tty_char: std_logic_vector(7 downto 0);
+signal tty_char, char: std_logic_vector(7 downto 0);
 
 signal vga_hactive, vga_vactive: std_logic;
 signal vga_memaddr: std_logic_vector(15 downto 0);
@@ -113,6 +114,26 @@ signal vga_char: std_logic_vector(7 downto 0);
 signal cursor_enable: std_logic;
 
 begin
+
+on_ascii_send: process(ascii_send, ascii, char_sent, char_sent_delayed)
+begin
+	if ((reset or (char_sent and (not char_sent_delayed))) = '1') then
+		char <= X"00";	-- to stop VGA to echo forever
+	else
+		if (rising_edge(ascii_send)) then
+			char <= ascii;
+		end if;
+	end if;
+end process;
+
+on_tty_clk: process(tty_clk, char_sent)
+begin
+	if (rising_edge(tty_clk)) then
+		char_sent_delayed <= char_sent;
+	end if;
+end process;
+
+ascii_sent <= '1' when (char = X"00") else '0';
 
 --------------------------------------------------------------
 -- VGA output, 60 rows * 80 columns
