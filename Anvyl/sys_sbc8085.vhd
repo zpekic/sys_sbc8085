@@ -61,10 +61,22 @@ entity sys_sbc8085 is
 				JA2: inout std_logic;
 				JA3: inout std_logic;
 				JA4: inout std_logic;
-				--JB1: inout std_logic;
-				--JB2: buffer std_logic;
-				--JB3: in std_logic;
-				--JB4: inout std_logic;
+				JB1: out std_logic;	-- GRAY 74F573.19 A0
+				JB2: out std_logic;	-- GRAY 74F573.18 A1
+				JB3: out std_logic;	-- GRAY 74F573.17 A2
+				JB4: out std_logic;	-- GRAY 74F573.16 A3
+				JB7: out std_logic;	-- GRAY 74F573.15 A4
+				JB8: out std_logic;	-- GRAY 74F573.14 A5
+				JB9: out std_logic;	-- GRAY 74F573.13 A6
+				JB10: out std_logic;	-- GRAY 74F573.12 A7
+				JC1: out std_logic;	-- WHITE 8085.21	A8
+				JC2: out std_logic;	-- WHITE 8085.22	A9
+				JC3: out std_logic;	-- WHITE 8085.23	A10
+				JC4: out std_logic;	-- WHITE 8085.24	A11
+				JC7: out std_logic;	-- WHITE 8085.25	A12
+				JC8: out std_logic;	-- WHITE 8085.26	A13
+				JC9: out std_logic;	-- WHITE 8085.27	A14
+				JC10: out std_logic;	-- WHITE 8085.28	A15
 				--DIP switches
 				DIP_B4, DIP_B3, DIP_B2, DIP_B1: in std_logic;
 				DIP_A4, DIP_A3, DIP_A2, DIP_A1: in std_logic;
@@ -72,14 +84,14 @@ entity sys_sbc8085 is
 				--KYPD_COL: out std_logic_vector(3 downto 0);
 				--KYPD_ROW: in std_logic_vector(3 downto 0);
 				-- SRAM --
-				SRAM_CS1: out std_logic;
-				SRAM_CS2: out std_logic;
-				SRAM_OE: out std_logic;
-				SRAM_WE: out std_logic;
-				SRAM_UPPER_B: out std_logic;
-				SRAM_LOWER_B: out std_logic;
-				Memory_address: out std_logic_vector(18 downto 0);
-				Memory_data: inout std_logic_vector(15 downto 0);
+				--SRAM_CS1: out std_logic;
+				--SRAM_CS2: out std_logic;
+				--SRAM_OE: out std_logic;
+				--SRAM_WE: out std_logic;
+				--SRAM_UPPER_B: out std_logic;
+				--SRAM_LOWER_B: out std_logic;
+				--Memory_address: out std_logic_vector(18 downto 0);
+				--Memory_data: inout std_logic_vector(15 downto 0);
 				-- Red / Yellow / Green LEDs
 				LDT1G: out std_logic;
 				LDT1Y: out std_logic;
@@ -92,7 +104,7 @@ entity sys_sbc8085 is
 				VSYNC_O: out std_logic;
 				RED_O: out std_logic_vector(3 downto 0);
 				GREEN_O: out std_logic_vector(3 downto 0);
-				BLUE_O: out std_logic_vector(3 downto 0)
+				BLUE_O: out std_logic_vector(3 downto 0);
 				-- TFT
 --				TFT_R_O: out std_logic_vector(7 downto 0);
 --				TFT_G_O: out std_logic_vector(7 downto 0);
@@ -103,16 +115,16 @@ entity sys_sbc8085 is
 --				TFT_BKLT_O: out std_logic;
 --				TFT_VDDEN_O: out std_logic;
 				-- breadboard signal connections
-				--BB1: inout std_logic;
-				--BB2: inout std_logic;
-				--BB3: inout std_logic;
-				--BB4: out std_logic;
-				--BB5: inout std_logic;
-				--BB6: inout std_logic;
-				--BB7: inout std_logic;
-				--BB8: inout std_logic;
-				--BB9: inout std_logic;
-				--BB10: in std_logic
+				BB1: inout std_logic;	-- BLUE 8085.12 AD0
+				BB2: inout std_logic;	-- BLUE 8085.13 AD1
+				BB3: inout std_logic;	-- BLUE 8085.14 AD2
+				BB4: inout std_logic;	-- BLUE 8085.15 AD3
+				BB5: inout std_logic;	-- BLUE 8085.16 AD4
+				BB6: inout std_logic;	-- BLUE 8085.17 AD5
+				BB7: inout std_logic;	-- BLUE 8085.18 AD6
+				BB8: inout std_logic;	-- BLUE 8085.19 AD7
+				BB9: out std_logic;	-- ORANGE	8085.31 nWR
+				BB10: out std_logic	-- YELLOW	8085.32 nRD
           );
 end sys_sbc8085;
 
@@ -320,7 +332,7 @@ signal hexout_ready, hexout_send: std_logic;
 -- HEX input path
 signal rx_ready, rx_valid: std_logic; 
 signal rx_char: std_logic_vector(7 downto 0);
-signal hexin_ready: std_logic;
+signal hexin_ready, hexin_busy: std_logic;
 signal hexin_char: std_logic_vector(7 downto 0);
 signal hexin_debug_ready, hexin_debug_send: std_logic;
 signal hexin_debug_char: std_logic_vector(7 downto 0);
@@ -329,7 +341,7 @@ signal hexin_busreq, hexin_busack: std_logic;
 -- Memory
 signal nMemRead, nMemWrite, nMem, nWait, wait_clk: std_logic;
 signal ABUS: std_logic_vector(15 downto 0);
-signal DBUS, ext_dbus: std_logic_vector(7 downto 0);
+signal DIN, DOUT: std_logic_vector(7 downto 0);
 
 -- TTY
 signal tty_sent, tty_send: std_logic;
@@ -409,7 +421,6 @@ counter: freqcounter Port map (
 		cout => open,
       value => baudrate_debug
 	);
-
 		
 ---------------------------------------------------------------------------------------------			
 -- 	SW7	SW6	Mode				TTY (VGA)			UART TX				7seg LED	
@@ -420,41 +431,69 @@ counter: freqcounter Port map (
 --		1		1		sel_loopback1	Echo UART RX		Echo UART RX		Baudrate (decimal)	
 ---------------------------------------------------------------------------------------------
 nMem <= hexin_busack and hexout_busack;
---memory_address <= "000" & ABUS;
---memory_data(7 downto 0) <= DBUS when (nMemWrite = '0') else "ZZZZZZZZ";
---DBUS <= memory_data(7 downto 0) when (nMemRead = '0') else "ZZZZZZZZ";
---SRAM_CS1 <= switch_sel(1);
---SRAM_CS2 <= '1';
---SRAM_UPPER_B <= '1';
---SRAM_LOWER_B <= switch_sel(1);
---SRAM_OE <= nMemRead;
---SRAM_WE <= nMemWrite;
 
 -- external memory
-SRAM_CS1 <= nMem;
-SRAM_CS2 <= '1';
-SRAM_OE <= nMemRead;
-SRAM_WE <= nMemWrite;
-SRAM_UPPER_B <= not ABUS(0);
-SRAM_LOWER_B <= ABUS(0);
-Memory_address(18 downto 15) <= "0000";
-Memory_address(14 downto 0) <= ABUS(15 downto 1);
+JB1 <= ABUS(0);
+JB2 <= ABUS(1);
+JB3 <= ABUS(2);
+JB4 <= ABUS(3);
+JB7 <= ABUS(4);
+JB8 <= ABUS(5);
+JB9 <= ABUS(6);
+JB10 <= ABUS(7);
+JC1 <= ABUS(8);
+JC2 <= ABUS(9);
+JC3 <= ABUS(10);
+JC4 <= ABUS(11);
+JC7 <= ABUS(12);
+JC8 <= ABUS(13);
+JC9 <= ABUS(14);
+JC10 <= not ABUS(15);
 
-Memory_data <= (DBUS & DBUS) when (nMemWrite = '0') else "ZZZZZZZZZZZZZZZZ";
-ext_dbus <= Memory_data(15 downto 8) when (ABUS(0) = '1') else Memory_data(7 downto 0);
-DBUS <= ext_dbus when (nMemRead = '0') else "ZZZZZZZZ";
+BB1 <= DOUT(0) when (nMemWrite = '0') else 'Z';
+DIN(0) <= BB1;
+BB2 <= DOUT(1) when (nMemWrite = '0') else 'Z';
+DIN(1) <= BB2;
+BB3 <= DOUT(2) when (nMemWrite = '0') else 'Z';
+DIN(2) <= BB3;
+BB4 <= DOUT(3) when (nMemWrite = '0') else 'Z';
+DIN(3) <= BB4;
+BB5 <= DOUT(4) when (nMemWrite = '0') else 'Z';
+DIN(4) <= BB5;
+BB6 <= DOUT(5) when (nMemWrite = '0') else 'Z';
+DIN(5) <= BB6;
+BB7 <= DOUT(6) when (nMemWrite = '0') else 'Z';
+DIN(6) <= BB7;
+BB8 <= DOUT(7) when (nMemWrite = '0') else 'Z';
+DIN(7) <= BB8;
+				
+BB9 	<= nMemWrite;	-- ORANGE	8085.31 nWR
+BB10	<= nMemRead;	-- YELLOW	8085.32 nRD
+
+--SRAM_CS1 <= nMem;
+--SRAM_CS2 <= '1';
+--SRAM_OE <= nMemRead;
+--SRAM_WE <= nMemWrite;
+--SRAM_UPPER_B <= not ABUS(0);
+--SRAM_LOWER_B <= ABUS(0);
+--Memory_address(18 downto 15) <= "0000";
+--Memory_address(14 downto 0) <= ABUS(15 downto 1);
+--
+--Memory_data <= (DBUS & DBUS) when (nMemWrite = '0') else "ZZZZZZZZZZZZZZZZ";
+--ext_dbus <= Memory_data(15 downto 8) when (ABUS(0) = '1') else Memory_data(7 downto 0);
+--DBUS <= ext_dbus when (nMemRead = '0') else "ZZZZZZZZ";
 	
 page_sel <= DIP_B4 & DIP_B3 & DIP_B2 & DIP_B1 & DIP_A4 & DIP_A3 & DIP_A2 & DIP_A1;
 
 -- Wait signal
-wait_clk <= (not nMem) when (nWait = '1') else button(3);
+wait_clk <= '1'; --(not nMem) when (nWait = '1') else button(3);
 on_wait_clk: process(reset, wait_clk)
 begin
 	if (reset = '1') then
 		nWait <= '1';
 	else
 		if (rising_edge(wait_clk)) then 
-			nWait <= '1'; --not nWait; -- TODO: enable nWait
+			nWait <= not nWait; 
 		end if;
 	end if;
 end process;
@@ -475,7 +514,7 @@ hexout: mem2hex port map (
 			nBUSACK => hexout_busack,
 			nWAIT => nWait,
 			ABUS => ABUS,
-			DBUS => DBUS,
+			DBUS => DIN,
 			START => BTN(0),		
 			BUSY => LDT1Y,			-- yellow LED when busy
 			PAGE => page_sel,		-- select any 8k block using micro DIP switches
@@ -488,6 +527,8 @@ hexout: mem2hex port map (
 -- HEX input path
 hexin_busack <= hexin_busreq when (switch_sel = sel_hexin) else '1';
 LDT2G <= not (nMemWrite);
+LDT2Y <= hexin_busy;
+PMOD_CTS <= not hexin_busy;
 hexin_ready <= rx_ready when (switch_sel = sel_hexin) else '0';
 hexin_char <= rx_char when (switch_sel = sel_hexin) else X"00";
 --hexin_debug_ready <= vga_sent when (switch_sel = sel_hexin) else '1';
@@ -505,8 +546,8 @@ hexin: hex2mem Port map (
 			nBUSACK => hexin_busack,
 			nWAIT => nWait,
 			ABUS => ABUS,
-			DBUS => DBUS,
-			BUSY => LDT2Y,	-- yellow LED when busy
+			DBUS => DOUT,
+			BUSY => hexin_busy,	-- yellow LED when busy
 			--
 			HEXIN_READY => hexin_ready,
 			HEXIN_CHAR	=> hexin_char,
@@ -514,7 +555,7 @@ hexin: hex2mem Port map (
 			--
 			TRACE_ERROR => '1', -- yes
 			TRACE_WRITE => '1', -- yes
-			TRACE_CHAR	=> '1', -- no
+			TRACE_CHAR	=> '0', -- no
 			ERROR => LDT2R,	-- red LED when error detected
 			TXDREADY => tty_sent,
 			TXDSEND => hexin_debug_send,
@@ -595,7 +636,7 @@ with switch_sel select led_sys <=
 	hexout_debug when sel_hexout,
 	hexin_debug when sel_hexin;
 
-led_debug <= ("00000101" & ABUS & DBUS) when (nWait = '0') else led_sys; 
+led_debug <= ("00000101" & ABUS & BB8 & BB7 & BB6 & BB5 & BB4 & BB3 & BB2 & BB1) when (nWait = '0') else led_sys; 
 	
 led6: sixdigitsevensegled Port map ( 
 		-- inputs

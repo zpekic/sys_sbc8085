@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2021-11-27T21:50:37</DateModified>
+  <DateModified>2021-11-28T23:35:01</DateModified>
   <ModuleName>sys_sbc8085</ModuleName>
-  <SummaryTimeStamp>2021-11-27T21:13:35</SummaryTimeStamp>
+  <SummaryTimeStamp>2021-11-28T23:19:11</SummaryTimeStamp>
   <SavedFilePath>C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/Anvyl/iseconfig/sys_sbc8085.xreport</SavedFilePath>
   <ImplementationReportsDirectory>C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/Anvyl</ImplementationReportsDirectory>
   <DateInitialized>2021-11-20T20:08:57</DateInitialized>
