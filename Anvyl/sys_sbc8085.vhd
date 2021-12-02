@@ -3,7 +3,7 @@
 -- Engineer: zpekic@hotmail.com
 -- 
 -- Create Date: 08/29/2020 11:13:02 PM
--- Design Name: 
+-- Design Name: Test system for 8085 MiniMax board using microcoded components
 -- Module Name: 
 -- Project Name: 
 -- Target Devices: https://store.digilentinc.com/anvyl-spartan-6-fpga-trainer-board/
@@ -37,12 +37,9 @@ entity sys_sbc8085 is
 	 			-- 100MHz on the Anvyl board
 				CLK: in std_logic;
 				-- Switches
-				-- SW(0) -- LED display selection
-				-- SW(2 downto 1) -- tracing selection
-				-- SW(3)
-				-- SW(4)
-				-- SW(6 downto 5) -- system clock speed 
-				-- SW7
+				-- SW(2 downto 0) -- 
+				-- SW(5 downto 3) -- 
+				-- SW(7 downto 6) --  
 				SW: in std_logic_vector(7 downto 0); 
 				-- Push buttons 
 				-- BTN0 - 
@@ -77,6 +74,7 @@ entity sys_sbc8085 is
 				JC8: out std_logic;	-- WHITE 8085.26	A13
 				JC9: out std_logic;	-- WHITE 8085.27	A14
 				JC10: out std_logic;	-- WHITE 8085.28	A15
+				JD1: out std_logic;	-- PURPLE 8085.30 IO/M (low for memory access)
 				--DIP switches
 				DIP_B4, DIP_B3, DIP_B2, DIP_B1: in std_logic;
 				DIP_A4, DIP_A3, DIP_A2, DIP_A1: in std_logic;
@@ -289,6 +287,7 @@ constant prescale_value: prescale_lookup := (
 	);
 
 -- Connect to PmodUSBUART 
+-- https://digilent.com/reference/pmod/pmodusbuart/reference-manual
 alias PMOD_RTS: std_logic is JA1;	
 alias PMOD_RXD: std_logic is JA2;
 alias PMOD_TXD: std_logic is JA3;
@@ -317,10 +316,18 @@ alias switch_uart_rate: std_logic_vector(2 downto 0) is switch(5 downto 3);
 alias switch_uart_mode: std_logic_vector(2 downto 0) is switch(2 downto 0);
 signal btn_command, btn_window: std_logic_vector(3 downto 0);
 signal page_sel: std_logic_vector(7 downto 0);
+alias dip_iom: std_logic is DIP_B4; 
+alias dip_traceerror: std_logic is DIP_B3; 
+alias dip_tracewrite: std_logic is DIP_B2; 
+alias dip_tracechar: std_logic is DIP_B1; 
+alias dip_page16k3: std_logic is DIP_A4; 
+alias dip_page16k2: std_logic is DIP_A3; 
+alias dip_page16k1: std_logic is DIP_A2; 
+alias dip_page16k0: std_logic is DIP_A1;
 
 -- HEX common 
 signal baudrate_x1, baudrate_x2, baudrate_x4, baudrate_x8: std_logic;
-alias hex_clk: std_logic is freq_50M(3); -- 6.25MHz
+signal hex_clk: std_logic; 
 
 -- HEX output path
 signal tx_send, tx_ready: std_logic;
@@ -338,10 +345,12 @@ signal hexin_debug_ready, hexin_debug_send: std_logic;
 signal hexin_debug_char: std_logic_vector(7 downto 0);
 signal hexin_busreq, hexin_busack: std_logic;
 
--- Memory
-signal nMemRead, nMemWrite, nMem, nWait, wait_clk: std_logic;
+-- 8080-like external bus (connected to physical pins)
+signal nRead, nWrite, nAccess: std_logic; 
 signal ABUS: std_logic_vector(15 downto 0);
 signal DIN, DOUT: std_logic_vector(7 downto 0);
+-- Wait
+signal nWait, wait_clk, wait_ena, wait_dis: std_logic;
 
 -- TTY
 signal tty_sent, tty_send: std_logic;
@@ -430,7 +439,7 @@ counter: freqcounter Port map (
 --		1		0		sel_loopback0	Echo UART RX		Echo UART RX		UART mode
 --		1		1		sel_loopback1	Echo UART RX		Echo UART RX		Baudrate (decimal)	
 ---------------------------------------------------------------------------------------------
-nMem <= hexin_busack and hexout_busack;
+nAccess <= hexin_busack and hexout_busack;
 
 -- external memory
 JB1 <= ABUS(0);
@@ -448,27 +457,28 @@ JC4 <= ABUS(11);
 JC7 <= ABUS(12);
 JC8 <= ABUS(13);
 JC9 <= ABUS(14);
-JC10 <= not ABUS(15);
+JC10 <= ABUS(15);
+JD1 <= dip_iom;
 
-BB1 <= DOUT(0) when (nMemWrite = '0') else 'Z';
+BB1 <= DOUT(0) when (nWrite = '0') else 'Z';
 DIN(0) <= BB1;
-BB2 <= DOUT(1) when (nMemWrite = '0') else 'Z';
+BB2 <= DOUT(1) when (nWrite = '0') else 'Z';
 DIN(1) <= BB2;
-BB3 <= DOUT(2) when (nMemWrite = '0') else 'Z';
+BB3 <= DOUT(2) when (nWrite = '0') else 'Z';
 DIN(2) <= BB3;
-BB4 <= DOUT(3) when (nMemWrite = '0') else 'Z';
+BB4 <= DOUT(3) when (nWrite = '0') else 'Z';
 DIN(3) <= BB4;
-BB5 <= DOUT(4) when (nMemWrite = '0') else 'Z';
+BB5 <= DOUT(4) when (nWrite = '0') else 'Z';
 DIN(4) <= BB5;
-BB6 <= DOUT(5) when (nMemWrite = '0') else 'Z';
+BB6 <= DOUT(5) when (nWrite = '0') else 'Z';
 DIN(5) <= BB6;
-BB7 <= DOUT(6) when (nMemWrite = '0') else 'Z';
+BB7 <= DOUT(6) when (nWrite = '0') else 'Z';
 DIN(6) <= BB7;
-BB8 <= DOUT(7) when (nMemWrite = '0') else 'Z';
+BB8 <= DOUT(7) when (nWrite = '0') else 'Z';
 DIN(7) <= BB8;
 				
-BB9 	<= nMemWrite;	-- ORANGE	8085.31 nWR
-BB10	<= nMemRead;	-- YELLOW	8085.32 nRD
+BB9 	<= nWrite;	-- ORANGE	8085.31 nWR
+BB10	<= nRead;	-- YELLOW	8085.32 nRD
 
 --SRAM_CS1 <= nMem;
 --SRAM_CS2 <= '1';
@@ -483,13 +493,18 @@ BB10	<= nMemRead;	-- YELLOW	8085.32 nRD
 --ext_dbus <= Memory_data(15 downto 8) when (ABUS(0) = '1') else Memory_data(7 downto 0);
 --DBUS <= ext_dbus when (nMemRead = '0') else "ZZZZZZZZ";
 	
-page_sel <= DIP_B4 & DIP_B3 & DIP_B2 & DIP_B1 & DIP_A4 & DIP_A3 & DIP_A2 & DIP_A1;
+-- HEX common	
+page_sel <= dip_page16k3 & dip_page16k3 & dip_page16k2 & dip_page16k2 & dip_page16k1 & dip_page16k1 & dip_page16k0 & dip_page16k0;
+hex_clk <= freq_50M(2);-- when (dip_hexclk = '1') else freq_50M(3); -- 6.25MHz or 12.5MHz
 
 -- Wait signal
-wait_clk <= '1'; --(not nMem) when (nWait = '1') else button(3);
+wait_ena <= not (reset or button(2) or wait_dis);
+wait_dis <= not (button(1) or wait_ena);
+
+wait_clk <= (not nAccess) when (nWait = '1') else button(3);
 on_wait_clk: process(reset, wait_clk)
 begin
-	if (reset = '1') then
+	if (wait_dis = '1') then
 		nWait <= '1';
 	else
 		if (rising_edge(wait_clk)) then 
@@ -500,7 +515,7 @@ end process;
 
 -- HEX output path
 hexout_busack <= hexout_busreq when (switch_sel = sel_hexout) else '1';
-LDT1G <= not (nMemRead);
+LDT1G <= not (nRead);
 LDT1R <= not rx_valid;		-- should never light up!
 
 hexout: mem2hex port map (
@@ -509,13 +524,13 @@ hexout: mem2hex port map (
 			--
 			debug => hexout_debug(15 downto 0),
 			--
-			nRD => nMemRead,
+			nRD => nRead,
 			nBUSREQ => hexout_busreq,
 			nBUSACK => hexout_busack,
 			nWAIT => nWait,
 			ABUS => ABUS,
 			DBUS => DIN,
-			START => BTN(0),		
+			START => button(0),		
 			BUSY => LDT1Y,			-- yellow LED when busy
 			PAGE => page_sel,		-- select any 8k block using micro DIP switches
 			COUNTSEL => '0',		-- 16 bytes per record
@@ -526,9 +541,9 @@ hexout: mem2hex port map (
 
 -- HEX input path
 hexin_busack <= hexin_busreq when (switch_sel = sel_hexin) else '1';
-LDT2G <= not (nMemWrite);
+LDT2G <= not (nWrite);
 LDT2Y <= hexin_busy;
-PMOD_CTS <= not hexin_busy;
+--PMOD_CTS <= not hexin_busy;
 hexin_ready <= rx_ready when (switch_sel = sel_hexin) else '0';
 hexin_char <= rx_char when (switch_sel = sel_hexin) else X"00";
 --hexin_debug_ready <= vga_sent when (switch_sel = sel_hexin) else '1';
@@ -541,7 +556,7 @@ hexin: hex2mem Port map (
 			--
 			debug => hexin_debug(15 downto 0),
 			--
-			nWR => nMemWrite,
+			nWR => nWrite,
 			nBUSREQ => hexin_busreq,
 			nBUSACK => hexin_busack,
 			nWAIT => nWait,
@@ -553,9 +568,9 @@ hexin: hex2mem Port map (
 			HEXIN_CHAR	=> hexin_char,
 			HEXIN_ZERO => open,
 			--
-			TRACE_ERROR => '1', -- yes
-			TRACE_WRITE => '1', -- yes
-			TRACE_CHAR	=> '0', -- no
+			TRACE_ERROR => dip_traceerror, 
+			TRACE_WRITE => dip_tracewrite, 
+			TRACE_CHAR	=> dip_tracechar, 
 			ERROR => LDT2R,	-- red LED when error detected
 			TXDREADY => tty_sent,
 			TXDSEND => hexin_debug_send,
