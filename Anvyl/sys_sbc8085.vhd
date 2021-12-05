@@ -10,7 +10,7 @@
 -- Input devices: 
 --
 -- Tool Versions: ISE 14.7 (nt)
--- Description: 
+-- Description: https://hackaday.io/page/11558-in-circuit-testing-using-intel-hex-file-components
 -- 
 -- Dependencies: 
 -- 
@@ -54,10 +54,10 @@ entity sys_sbc8085 is
 				-- 8 single LEDs
 				LED: out std_logic_vector(7 downto 0);
 				--PMOD interface
-				JA1: inout std_logic;
-				JA2: inout std_logic;
-				JA3: inout std_logic;
-				JA4: inout std_logic;
+				JA1: inout std_logic;	-- Connected to USB2UART
+				JA2: inout std_logic;	-- Connected to USB2UART
+				JA3: inout std_logic;	-- Connected to USB2UART
+				JA4: inout std_logic;	-- Connected to USB2UART
 				JB1: out std_logic;	-- GRAY 74F573.19 A0
 				JB2: out std_logic;	-- GRAY 74F573.18 A1
 				JB3: out std_logic;	-- GRAY 74F573.17 A2
@@ -75,6 +75,17 @@ entity sys_sbc8085 is
 				JC9: out std_logic;	-- WHITE 8085.27	A14
 				JC10: out std_logic;	-- WHITE 8085.28	A15
 				JD1: out std_logic;	-- PURPLE 8085.30 IO/M (low for memory access)
+				-- breadboard signal connections
+				BB1: inout std_logic;	-- BLUE 8085.12 AD0
+				BB2: inout std_logic;	-- BLUE 8085.13 AD1
+				BB3: inout std_logic;	-- BLUE 8085.14 AD2
+				BB4: inout std_logic;	-- BLUE 8085.15 AD3
+				BB5: inout std_logic;	-- BLUE 8085.16 AD4
+				BB6: inout std_logic;	-- BLUE 8085.17 AD5
+				BB7: inout std_logic;	-- BLUE 8085.18 AD6
+				BB8: inout std_logic;	-- BLUE 8085.19 AD7
+				BB9: out std_logic;		-- ORANGE	8085.31 nWR
+				BB10: out std_logic;		-- YELLOW	8085.32 nRD
 				--DIP switches
 				DIP_B4, DIP_B3, DIP_B2, DIP_B1: in std_logic;
 				DIP_A4, DIP_A3, DIP_A2, DIP_A1: in std_logic;
@@ -102,7 +113,7 @@ entity sys_sbc8085 is
 				VSYNC_O: out std_logic;
 				RED_O: out std_logic_vector(3 downto 0);
 				GREEN_O: out std_logic_vector(3 downto 0);
-				BLUE_O: out std_logic_vector(3 downto 0);
+				BLUE_O: out std_logic_vector(3 downto 0)
 				-- TFT
 --				TFT_R_O: out std_logic_vector(7 downto 0);
 --				TFT_G_O: out std_logic_vector(7 downto 0);
@@ -112,17 +123,6 @@ entity sys_sbc8085 is
 --				TFT_DISP_O: out std_logic;
 --				TFT_BKLT_O: out std_logic;
 --				TFT_VDDEN_O: out std_logic;
-				-- breadboard signal connections
-				BB1: inout std_logic;	-- BLUE 8085.12 AD0
-				BB2: inout std_logic;	-- BLUE 8085.13 AD1
-				BB3: inout std_logic;	-- BLUE 8085.14 AD2
-				BB4: inout std_logic;	-- BLUE 8085.15 AD3
-				BB5: inout std_logic;	-- BLUE 8085.16 AD4
-				BB6: inout std_logic;	-- BLUE 8085.17 AD5
-				BB7: inout std_logic;	-- BLUE 8085.18 AD6
-				BB8: inout std_logic;	-- BLUE 8085.19 AD7
-				BB9: out std_logic;	-- ORANGE	8085.31 nWR
-				BB10: out std_logic	-- YELLOW	8085.32 nRD
           );
 end sys_sbc8085;
 
@@ -294,7 +294,7 @@ alias PMOD_TXD: std_logic is JA3;
 alias PMOD_CTS: std_logic is JA4;	
 
 -- 
-signal reset: std_logic;
+signal reset, reset_btn, reset_sw: std_logic;
 
 -- debug
 signal showdigit, showdot: std_logic_vector(3 downto 0);
@@ -310,6 +310,7 @@ signal freq_2048: std_logic_vector(11 downto 0);
 signal prescale_baud, prescale_power: integer range 0 to 65535;
 
 -- input by switches and buttons
+signal switch_old: std_logic_vector(7 downto 0);
 signal switch, button: std_logic_vector(7 downto 0);
 alias switch_sel:	std_logic_vector(1 downto 0) is switch(7 downto 6);
 alias switch_uart_rate: std_logic_vector(2 downto 0) is switch(5 downto 3);
@@ -363,7 +364,15 @@ alias tty_clk: std_logic is freq_50M(2); --freq_2048(11);
 begin
 
 -- no separate reset button
-reset <= '1' when (BTN = "1111") else '0';
+reset		<= '1' when (BTN = "1111") else '0';
+reset_sw	<= '0' when (switch = switch_old) else '1';
+
+on_freq4096: process(freq4096, switch)
+begin
+	if (rising_edge(freq4096)) then
+		switch_old <= switch;
+	end if;
+end process;
 
 -- various clock signal generation
 clockgen: sn74hc4040 port map (
@@ -436,8 +445,8 @@ counter: freqcounter Port map (
 ---------------------------------------------------------------------------------------------
 --		0		0		sel_hexout		-				 		Generated HEX		mem2hex debug port (or bus if nWait = 0)
 --		0		1		sel_hexin		Microcode trace	Echo UART RX		hex2mem debug port (or bus if nWait = 0)
---		1		0		sel_loopback0	Echo UART RX		Echo UART RX		UART mode
---		1		1		sel_loopback1	Echo UART RX		Echo UART RX		Baudrate (decimal)	
+--		1		0		sel_loopback0	Echo UART RX		Echo UART RX		Baudrate (decimal)
+--		1		1		sel_loopback1	Echo UART RX		Echo UART RX		UART mode	
 ---------------------------------------------------------------------------------------------
 nAccess <= hexin_busack and hexout_busack;
 
@@ -480,25 +489,12 @@ DIN(7) <= BB8;
 BB9 	<= nWrite;	-- ORANGE	8085.31 nWR
 BB10	<= nRead;	-- YELLOW	8085.32 nRD
 
---SRAM_CS1 <= nMem;
---SRAM_CS2 <= '1';
---SRAM_OE <= nMemRead;
---SRAM_WE <= nMemWrite;
---SRAM_UPPER_B <= not ABUS(0);
---SRAM_LOWER_B <= ABUS(0);
---Memory_address(18 downto 15) <= "0000";
---Memory_address(14 downto 0) <= ABUS(15 downto 1);
---
---Memory_data <= (DBUS & DBUS) when (nMemWrite = '0') else "ZZZZZZZZZZZZZZZZ";
---ext_dbus <= Memory_data(15 downto 8) when (ABUS(0) = '1') else Memory_data(7 downto 0);
---DBUS <= ext_dbus when (nMemRead = '0') else "ZZZZZZZZ";
-	
 -- HEX common	
 page_sel <= dip_page16k3 & dip_page16k3 & dip_page16k2 & dip_page16k2 & dip_page16k1 & dip_page16k1 & dip_page16k0 & dip_page16k0;
 hex_clk <= freq_50M(2);-- when (dip_hexclk = '1') else freq_50M(3); -- 6.25MHz or 12.5MHz
 
 -- Wait signal
-wait_ena <= not (reset or button(2) or wait_dis);
+wait_ena <= not (reset or reset_sw or button(2) or wait_dis);
 wait_dis <= not (button(1) or wait_ena);
 
 wait_clk <= (not nAccess) when (nWait = '1') else button(3);
@@ -516,7 +512,7 @@ end process;
 -- HEX output path
 hexout_busack <= hexout_busreq when (switch_sel = sel_hexout) else '1';
 LDT1G <= not (nRead);
-LDT1R <= not rx_valid;		-- should never light up!
+LDT1R <= (not rx_valid) or reset;
 
 hexout: mem2hex port map (
 			clk => hex_clk,
@@ -666,5 +662,4 @@ led6: sixdigitsevensegled Port map (
 		segment(7) => DP
 		);
 
-				
 end;
