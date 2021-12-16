@@ -2,7 +2,7 @@
 -- Company: @Home
 -- Engineer: zpekic@hotmail.com
 -- 
--- Create Date: 08/29/2020 11:13:02 PM
+-- Create Date: 11/29/2021 11:13:02 PM
 -- Design Name: Test system for 8085 MiniMax board using microcoded components
 -- Module Name: 
 -- Project Name: 
@@ -358,8 +358,6 @@ signal tty_sent, tty_send: std_logic;
 signal tty_char: std_logic_vector(7 downto 0);
 alias tty_clk: std_logic is freq_50M(2); --freq_2048(11);
 
--- UART control registers
---signal uart_baudsel, uart_modesel: std_logic_vector(2 downto 0);
 
 begin
 
