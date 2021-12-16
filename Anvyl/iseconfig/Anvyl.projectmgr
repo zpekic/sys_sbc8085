@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!--This is an ISE project configuration file.-->
 <!--It holds project specific layout data for the projectmgr plugin.-->
 <!--Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved.-->
@@ -7,6 +7,7 @@
    <ItemView engineview="SynthesisOnly" guiview="Source" compilemode="AutoCompile" >
       <ClosedNodes>
          <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/hex2mem - Behavioral C:|Users|zoltanp|Documents|HexCalc|MiniMax8085|sys_dbg8085|Hex2Mem|hex2mem.vhd</ClosedNode>
          <ClosedNode>/sys_sbc8085 - Structural C:|Users|zoltanp|Documents|HexCalc|MiniMax8085|sys_sbc8085|Anvyl|sys_sbc8085.vhd/counter - freqcounter - Behavioral</ClosedNode>
          <ClosedNode>/sys_sbc8085 - Structural C:|Users|zoltanp|Documents|HexCalc|MiniMax8085|sys_sbc8085|Anvyl|sys_sbc8085.vhd/debounce_btn - debouncer8channel - Behavioral</ClosedNode>
          <ClosedNode>/sys_sbc8085 - Structural C:|Users|zoltanp|Documents|HexCalc|MiniMax8085|sys_sbc8085|Anvyl|sys_sbc8085.vhd/debounce_sw - debouncer8channel - Behavioral</ClosedNode>
@@ -16,13 +17,13 @@
          <ClosedNode>/sys_sbc8085 - Structural C:|Users|zoltanp|Documents|HexCalc|MiniMax8085|sys_sbc8085|Anvyl|sys_sbc8085.vhd/tty - tty2vga - Behavioral/vga_tty - tty_screen - Behavioral</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>sys_sbc8085 - Structural (C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/Anvyl/sys_sbc8085.vhd)</SelectedItem>
+         <SelectedItem>sys_dbg8085 - Structural (C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_dbg8085/Anvyl/sys_dbg8085.vhd)</SelectedItem>
       </SelectedItems>
-      <ScrollbarPosition orientation="vertical" >2</ScrollbarPosition>
-      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000345000000020000000000000000000000000200000064ffffffff000000810000000300000002000003450000000100000003000000000000000100000003</ViewHeaderState>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >259</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000348000000020000000000000000000000000200000064ffffffff000000810000000300000002000003480000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>sys_sbc8085 - Structural (C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/Anvyl/sys_sbc8085.vhd)</CurrentItem>
+      <CurrentItem>sys_dbg8085 - Structural (C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_dbg8085/Anvyl/sys_dbg8085.vhd)</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_ARCHITECTURE" guiview="Process" >
       <ClosedNodes>
@@ -38,7 +39,7 @@
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000104000000010000000100000000000000000000000064ffffffff000000810000000000000001000001040000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000139000000010000000100000000000000000000000064ffffffff000000810000000000000001000001390000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
       <CurrentItem>Design Summary/Reports</CurrentItem>
    </ItemView>
@@ -47,13 +48,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Anvyl\Anvyl_Master.ucf</SelectedItem>
+         <SelectedItem>C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_dbg8085\Anvyl\Anvyl_Master.ucf</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000000000000001000000000000000000000000000000000000036c000000040101000100000000000000000000000064ffffffff0000008100000000000000040000020f00000001000000000000009d00000001000000000000006600000001000000000000005a0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\Anvyl\Anvyl_Master.ucf</CurrentItem>
+      <CurrentItem>C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_dbg8085\Anvyl\Anvyl_Master.ucf</CurrentItem>
    </ItemView>
    <ItemView guiview="Library" >
       <ClosedNodes>
