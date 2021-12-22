@@ -27,13 +27,13 @@ signal tty_instructionstart: std_logic_vector(5 downto 0);
 
 constant tty_mapper: tty_mapper_memory := (
 
--- L0087@000A. .map 0b00?_????;
+-- L0134@000A. .map 0b00?_????;
 0 => O"12",
 
--- L0091@000B. .map 0b000_0001;
+-- L0138@000B. .map 0b000_0001;
 1 => O"13",
 
--- L0106@0012. .map 0b000_0010;
+-- L0153@0012. .map 0b000_0010;
 2 => O"22",
 
 3 => O"12",
@@ -50,14 +50,14 @@ constant tty_mapper: tty_mapper_memory := (
 
 9 => O"12",
 
--- L0110@0013. .map 0b000_1010;
+-- L0157@0013. .map 0b000_1010;
 10 => O"23",
 
 11 => O"12",
 
 12 => O"12",
 
--- L0144@0021. .map 0b000_1101;
+-- L0191@0021. .map 0b000_1101;
 13 => O"41",
 
 14 => O"12",

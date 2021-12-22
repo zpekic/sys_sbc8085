@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: zpekic@hotmail.com
 -- 
 -- Create Date:    20:40:14 05/10/2020 
 -- Design Name: 
@@ -8,7 +8,7 @@
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
--- Description: 
+-- Description: https://hackaday.io/project/182959-custom-circuit-testing-using-intel-hex-files/log/201614-micro-coded-controller-deep-dive
 --
 -- Dependencies: 
 --
@@ -76,7 +76,7 @@ component tty_control_unit is
 end component;
 
 -- registers
-signal cursorx, cursory, altx, alty: std_logic_vector(7 downto 0);
+signal cursorx, cursory: std_logic_vector(7 downto 0);
 signal data: std_logic_vector(7 downto 0);
 
 -- conditions
@@ -134,20 +134,21 @@ cu: tty_control_unit
 
 char_sent <= ready;
 
-with tty_ready select
-	ready <= '1' when ready_yes,
-				(char_is_zero or (not enable)) when ready_char_is_zero,
-				'0' when others;
+with tty_ready select ready <=
+			'1' when ready_yes,
+			(char_is_zero or (not enable)) when ready_char_is_zero,
+			'0' when others;
 				
 -- memory interface
 mwr <= tty_mem(1);
 mrd <= tty_mem(0);
 
-x <= cursorx when (tty_xsel = xsel_cursorx) else altx;
-y <= cursory when (tty_ysel = ysel_cursory) else alty;
+x <= cursorx;
+y <= cursory;
 
 dout <= data;
 
+-- data from or to memory
 update_data: process(clk, tty_data, char, din)
 begin
 	if (rising_edge(clk)) then
@@ -164,7 +165,7 @@ begin
 	end if;
 end process;
 
--- internal registers
+-- cursor registers
 update_cursorx: process(clk, tty_cursorx, cursorx, maxcol)
 begin
 	if (rising_edge(clk)) then
@@ -195,30 +196,6 @@ begin
 				 cursory <= std_logic_vector(unsigned(cursory) - 1);
 			when cursory_maxrow =>
 				 cursory <= maxrow;
-			when others =>
-				null;
-		end case;
-	end if;
-end process;
-
-update_alx: process(clk, tty_altx, cursorx)
-begin
-	if (rising_edge(clk)) then
-		case tty_altx is
-			when  altx_cursorx =>
-				altx <= cursorx;
-			when others =>
-				null;
-		end case;
-	end if;
-end process;
-
-update_aly: process(clk, tty_alty, cursory)
-begin
-	if (rising_edge(clk)) then
-		case tty_alty is
-			when alty_cursory =>
-				alty <= cursory;
 			when others =>
 				null;
 		end case;
