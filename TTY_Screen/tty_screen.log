@@ -3,6 +3,7 @@
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 Compiling tty_screen.mcc, pass 1 out of 2.
+Clock edge explicitly set to rising_edge()
 Line 110: resolved aliases:  noop
 L0110@0000._reset:  if true then next else next;
 
@@ -275,4 +276,4 @@ Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\TTY_Screen\t
 Writing 'C:\Users\zoltanp\Documents\HexCalc\MiniMax8085\sys_sbc8085\TTY_Screen\tty_screen_map.bin' ... Done.
 Generating symbol:  skipped.
 Generating controller
-Generating controller 'C:\Users\zoltanp\Documents
+Gener

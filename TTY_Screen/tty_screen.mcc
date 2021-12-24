@@ -14,7 +14,7 @@
 			.mapper 7, 6, tty_screen_map.mif, tty_screen_map.cgf, tty:tty_screen_map.vhd, tty_screen_map.hex, tty_screen_map.bin, 1;
 
 			// controller generated will have a 4 level hardware return stack
-			.controller tty_control_unit.vhd, 4;
+			.controller tty_control_unit.vhd, 4, rising;
 
 			// MCC microengines are largely "horizontal" microcoded. Fields adding up to whole microinstruction must be defined first
 			// order of definition and width of fields determines their position in microinstruction
