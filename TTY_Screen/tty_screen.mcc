@@ -101,7 +101,7 @@ return:		.alias if false then next else return;
 noop:		.alias if true then next else next;
 
 // define subroutines
-printChar	.sub;	// printChar() == if true then printChar else printChar - control unit recognized both labels same and executes a subroutine call
+writeMem	.sub;	// equivalent to 'if true then printChar else printChar' - control unit recognizes both labels same and executes a subroutine call
 readMem		.sub;	// note no regfield parameters, so must be called with readMem();
 
 			.org 0;
@@ -122,7 +122,7 @@ waitChar:	ready = char_is_zero, data <= char,
 
 
 			.map 0b???_????;		// default to printable character handler 
-main:		printChar();
+main:		writeMem();
 
 			cursorx <= inc;
 
@@ -140,7 +140,7 @@ CLS:		data <= space, cursory <= zero;
 
 nextRow:	cursorx <= zero;
 			
-nextCol:	printChar();
+nextCol:	writeMem();
 
 			cursorx <= inc;
 
@@ -171,7 +171,7 @@ copyCol:	if cursorx_ge_maxcol then nextY else next;
 			readMem();
 			
 			cursory <= dec,
-			printChar();
+			writeMem();
 
 			cursorx <= inc,
 			goto copyCol;
@@ -183,7 +183,7 @@ lastLine:	data <= space, cursory <= dec, cursorx <= zero;
 
 clearCol:	if cursorx_ge_maxcol then CR else next;
 
-			printChar();
+			writeMem();
 
 			cursorx <= inc,
 			goto clearCol;
@@ -192,7 +192,7 @@ clearCol:	if cursorx_ge_maxcol then CR else next;
 CR:			cursorx <= zero,
 			goto nextChar;
 
-printChar:	if memory_ready then next else repeat;	// wait for video memory
+writeMem:	if memory_ready then next else repeat;	// wait for video memory
 
 			mem = write,							// data reg is connected to dout
 			return;

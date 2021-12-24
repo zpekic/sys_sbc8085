@@ -235,7 +235,7 @@ constant tty_microcode: tty_code_memory := (
 --  ready = 00, if (000) then 000011 else 000011, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 5 => "00" & O"0" & O"03" & O"03" & O"0" & O"0" & "00" & "00" & "00000",
 
--- L0125@0006.main:  printChar();
+-- L0125@0006.main:  writeMem();
 --  ready = 00, if (000) then 100010 else 100010, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 6 => "00" & O"0" & O"42" & O"42" & O"0" & O"0" & "00" & "00" & "00000",
 
@@ -263,7 +263,7 @@ constant tty_microcode: tty_code_memory := (
 --  ready = 00, if (000) then 000000 else 000000, cursorx <= 001, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 12 => "00" & O"0" & O"00" & O"00" & O"1" & O"0" & "00" & "00" & "00000",
 
--- L0143@000D.nextCol:  printChar();
+-- L0143@000D.nextCol:  writeMem();
 --  ready = 00, if (000) then 100010 else 100010, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 13 => "00" & O"0" & O"42" & O"42" & O"0" & O"0" & "00" & "00" & "00000",
 
@@ -315,7 +315,7 @@ constant tty_microcode: tty_code_memory := (
 --  ready = 00, if (000) then 100100 else 100100, cursorx <= 000, cursory <= 010, data <= 00, mem = 00, reserved = 00000;
 25 => "00" & O"0" & O"44" & O"44" & O"0" & O"2" & "00" & "00" & "00000",
 
--- L0173@001A.  cursory <= dec, printChar();
+-- L0173@001A.  cursory <= dec, writeMem();
 --  ready = 00, if (000) then 100010 else 100010, cursorx <= 000, cursory <= 011, data <= 00, mem = 00, reserved = 00000;
 26 => "00" & O"0" & O"42" & O"42" & O"0" & O"3" & "00" & "00" & "00000",
 
@@ -335,7 +335,7 @@ constant tty_microcode: tty_code_memory := (
 --  ready = 00, if (010) then 100001 else 000000, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 30 => "00" & O"2" & O"41" & O"00" & O"0" & O"0" & "00" & "00" & "00000",
 
--- L0186@001F.  printChar();
+-- L0186@001F.  writeMem();
 --  ready = 00, if (000) then 100010 else 100010, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 31 => "00" & O"0" & O"42" & O"42" & O"0" & O"0" & "00" & "00" & "00000",
 
@@ -347,7 +347,7 @@ constant tty_microcode: tty_code_memory := (
 --  ready = 00, if (111) then 000000 else 001010, cursorx <= 001, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 33 => "00" & O"7" & O"00" & O"12" & O"1" & O"0" & "00" & "00" & "00000",
 
--- L0195@0022.printChar:  if memory_ready then next else repeat;
+-- L0195@0022.writeMem:  if memory_ready then next else repeat;
 --  ready = 00, if (110) then 000000 else 000001, cursorx <= 000, cursory <= 000, data <= 00, mem = 00, reserved = 00000;
 34 => "00" & O"6" & O"00" & O"01" & O"0" & O"0" & "00" & "00" & "00000",
 

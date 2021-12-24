@@ -8,7 +8,13 @@
 <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.    -->
 
 <messages>
-<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/TTY_Screen/tty_screen.vhd&quot; into library work</arg>
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/TTY_Screen/tty_control_unit.vhd&quot; into library work</arg>
+</msg>
+
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/TTY_Screen/tty_screen_code.vhd&quot; into library work</arg>
+</msg>
+
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;C:/Users/zoltanp/Documents/HexCalc/MiniMax8085/sys_sbc8085/TTY_Screen/tty_screen_map.vhd&quot; into library work</arg>
 </msg>
 
 </messages>
