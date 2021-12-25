@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- mcc V1.0.0926 - Custom microcode compiler (c)2020-... 
+-- mcc V1.0.1225 - Custom microcode compiler (c)2020-... 
 --    https://github.com/zpekic/MicroCodeCompiler
 --------------------------------------------------------
 -- Auto-generated file, do not modify. To customize, create 'controller_template.vhd' file in mcc.exe folder
@@ -33,7 +33,7 @@ architecture Behavioral of tty_control_unit is
 
 constant zero: std_logic_vector(31 downto 0) := X"00000000";
 
-signal uPC0, uPC1, uPC2, uPC3 : std_logic_vector(CODE_DEPTH - 1 downto 0);
+signal uPC0, uPC1 : std_logic_vector(CODE_DEPTH - 1 downto 0);
 signal condition, push, jump: std_logic;
 
 begin
@@ -59,8 +59,6 @@ begin
                   if (push = '1') then
 				uPC0 <= ui_nextinstr;
 						uPC1 <= std_logic_vector(unsigned(uPC0) + 1);
-						uPC2 <= uPC1;
-						uPC3 <= uPC2;
                   else
                      uPC0 <= ui_nextinstr;
                   end if;
@@ -72,9 +70,7 @@ begin
                          uPC0 <= uPC0;
                      when "10" =>	-- return
 								uPC0 <= uPC1;
-								uPC1 <= uPC2;
-								uPC2 <= uPC3;
-								uPC3 <= (others => '0');
+								uPC1 <= (others => '1');
                      when "11" =>	-- fork
                          uPC0 <= seq_fork;
                      when others =>
